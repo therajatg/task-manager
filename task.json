@@ -1,6 +1,12 @@
 {
   "tasks": [
     {
+      "id": 2,
+      "title": "Create a new project",
+      "description": "Create a new project using the Express application generator",
+      "completed": true
+    },
+    {
       "id": 3,
       "title": "Install nodemon",
       "description": "Install nodemon as a development dependency",
@@ -79,22 +85,10 @@
       "completed": false
     },
     {
-      "title": "Install Express",
-      "description": "Install Express",
-      "completed": false,
-      "id": "80a0dfb9-e3a3-48e0-8105-31c987c0186d"
-    },
-    {
-      "title": "Install Express xqw",
-      "description": "Install Express wq",
-      "completed": false,
-      "id": "50a98817-cc5f-4745-9c9b-813f57a4318f"
-    },
-    {
-      "id": "0af6bb5d-18e3-4219-8bb6-ad0b0691ca4c",
-      "title": "Install Expressdsax xqw",
-      "description": "Install asxcsacxascxascasc wq",
-      "completed": true
+      "id": "751d5407-70bd-4cd5-9f40-a5cda811799f",
+      "title": "New Task",
+      "description": "New Task Description",
+      "completed": false
     }
   ]
 }

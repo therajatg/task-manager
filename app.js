@@ -39,7 +39,7 @@ app.post("/tasks", (req, res) => {
           if (error) {
             return res.status(500).json("Internal server error");
           } else {
-            return res.status(200).json("Task added successfully");
+            return res.status(201).json("Task added successfully");
           }
         }
       );
@@ -57,29 +57,33 @@ app.post("/tasks", (req, res) => {
 app.put("/tasks/:id", (req, res) => {
   try {
     const id = req.params.id;
-    const newTask = req.body;
+    const validation = Validator.validateTaskId(id);
+    if (validation.status) {
+      const newTask = req.body;
+      if (Validator.validateTaskInfo(newTask).status) {
+        const updatedTaskList = tasks.map((task) =>
+          task.id == id ? { id, ...newTask } : task
+        );
 
-    if (Validator.validateTaskInfo(newTask).status) {
-      const updatedTaskList = tasks.map((task) =>
-        task.id == id ? { id, ...newTask } : task
-      );
-
-      fs.writeFile(
-        "./task.json",
-        JSON.stringify({ tasks: updatedTaskList }),
-        { encoding: "utf8", flag: "w" },
-        (error) => {
-          if (error) {
-            return res.status(500).json("Internal server error");
-          } else {
-            return res.status(200).json("Task updated successfully");
+        fs.writeFile(
+          "./task.json",
+          JSON.stringify({ tasks: updatedTaskList }),
+          { encoding: "utf8", flag: "w" },
+          (error) => {
+            if (error) {
+              return res.status(500).json("Internal server error");
+            } else {
+              return res.status(200).json("Task updated successfully");
+            }
           }
-        }
-      );
+        );
+      } else {
+        return res
+          .status(400)
+          .json(Validator.validateTaskInfo(newTask).message);
+      }
     } else {
-      return res
-        .status(400)
-        .json(Validator.validateTaskInfo(taskToAdd).message);
+      return res.status(404).json(validation.message);
     }
   } catch (error) {
     console.log(error);
@@ -90,22 +94,27 @@ app.put("/tasks/:id", (req, res) => {
 app.delete("/tasks/:id", (req, res) => {
   try {
     const id = req.params.id;
-    const updatedTaskList = tasks.filter((task) => task.id != id);
-    fs.writeFile(
-      "./task.json",
-      JSON.stringify({ tasks: updatedTaskList }),
-      {
-        encoding: "utf8",
-        flag: "w",
-      },
-      (error) => {
-        if (error) {
-          return res.status(500).json("Internal server error");
-        } else {
-          return res.status(200).json("Task deleted successfully");
+    const validation = Validator.validateTaskId(id);
+    if (validation.status) {
+      const updatedTaskList = tasks.filter((task) => task.id != id);
+      fs.writeFile(
+        "./task.json",
+        JSON.stringify({ tasks: updatedTaskList }),
+        {
+          encoding: "utf8",
+          flag: "w",
+        },
+        (error) => {
+          if (error) {
+            return res.status(500).json("Internal server error");
+          } else {
+            return res.status(200).json("Task deleted successfully");
+          }
         }
-      }
-    );
+      );
+    } else {
+      return res.status(404).json(validation.message);
+    }
   } catch (error) {
     return res.status(500).json("Internal server error");
   }

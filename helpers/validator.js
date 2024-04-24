@@ -1,3 +1,5 @@
+const { tasks } = require("../task.json");
+
 class Validator {
   static validateTaskInfo(taskInfo) {
     if (
@@ -14,8 +16,17 @@ class Validator {
       };
     }
   }
-}
 
-//If course id is not unique, we can return a different message with the same status that is false, do this later
+  static validateTaskId(taskId) {
+    if (tasks.find((task) => task.id == taskId)) {
+      return { status: true, message: "taskId Validated Successfully" };
+    } else {
+      return {
+        status: false,
+        message: "Task Id is incorrect",
+      };
+    }
+  }
+}
 
 module.exports = Validator;
